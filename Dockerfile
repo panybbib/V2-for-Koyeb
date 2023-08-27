@@ -7,8 +7,12 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh ./
 
 RUN apt-get update && apt-get install -y wget unzip iproute2 systemctl &&\
-    wget -O temp.zip $(wget -qO- "https://api.github.com/repos/v2fly/v2ray-core/releases/latest" | grep -m1 -o "https.*linux-64.*zip") &&\
-    unzip temp.zip v2ray geoip.dat geosite.dat &&\
+    wget -q -O temp.zip https://github.com/v2fly/v2ray-core/releases/download/v4.45.0/v2ray-linux-64.zip &&\
+    unzip temp.zip v2ray &&\
+    wget -q -O geosite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat &&\
+    wget -q -O geoip.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat &&\
+    #wget -O temp.zip $(wget -qO- "https://api.github.com/repos/v2fly/v2ray-core/releases/latest" | grep -m1 -o "https.*linux-64.*zip") &&\
+    #unzip temp.zip v2ray geoip.dat geosite.dat &&\
     mv v2ray v &&\
     rm -f temp.zip &&\
     chmod -v 755 v entrypoint.sh &&\
